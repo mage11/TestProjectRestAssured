@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 
 import org.json.JSONException;
@@ -13,6 +14,9 @@ import org.json.JSONObject;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.File;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -76,6 +80,16 @@ public class FirstTest {
 
     }
 
+    @Test(dataProvider = "dataSetForUploadFiles")
+    public void uploadFile(String spaceId, String filePath, Boolean result){
+        given()
+                .cookie(cookieName, cookie)
+                .multiPart(new File(filePath))
+                .post(frontURL + "/api/v1/recognitionTasks?spaceId=" + spaceId)
+                .then().body("result", equalTo(result));
+
+    }
+
     @BeforeTest
     public void filter(){
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
@@ -103,5 +117,14 @@ public class FirstTest {
                 {"invalidValue", true}
         };
     }
+
+    @DataProvider(name = "dataSetForUploadFiles")
+    public Object[][] createDataSetForUploadFiles() {
+
+        return new Object[][] {
+                {"4be4e911-e233-42df-80ec-c5154c6605c4", "C:\\Users\\mage\\Desktop\\testfile.png", true},
+        };
+    }
+
 
 }
