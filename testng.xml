@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Calc Test">
+
+    <test name="All_Test">
+        <packages>
+            <package name="testpackage.*" />
+        </packages>
+    </test>
+
+</suite>
