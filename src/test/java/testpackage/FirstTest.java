@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 import static io.restassured.RestAssured.*;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 
 
@@ -88,6 +89,25 @@ public class FirstTest {
                 .post(frontURL + "/api/v1/recognitionTasks?spaceId=" + spaceId)
                 .then().body("result", equalTo(result));
 
+    }
+
+    //Проверка схемы json
+    @Test
+    public void validationSchema(){
+        JSONObject json = new JSONObject();
+        json.put("login", "");
+        json.put("password", "");
+
+        Response response=  given()
+                .contentType(ContentType.JSON)
+                .body(json.toString())
+                .post("https://id-test2.hr-link.ru/api/v1/login");
+
+        given()
+                .cookie("sessionId", response.getCookie("sessionId"))
+                .get("https://app-test2.hr-link.ru/api/v1/clients/0064ed51-8896-4008-84b3-4f03a12687cb/departments/123/externalId")
+                .then()
+                .body(matchesJsonSchemaInClasspath("validschema.json"));
     }
 
     @BeforeTest

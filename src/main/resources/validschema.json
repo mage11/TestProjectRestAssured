@@ -1,0 +1,27 @@
+{
+  "result": {
+    "type": "boolean"
+  },
+  "clientDepartment": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "parentDepartmentId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "externalId": {
+        "type": "string"
+      },
+      "version": {
+        "type": "int"
+      }
+    }
+  }
+}
